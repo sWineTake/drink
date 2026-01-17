@@ -1,6 +1,6 @@
-# Drink Project
+# Drink Project (음료 레시피 공유 플랫폼)
+🔗 **[사이트 바로가기](https://drink-9no0tvu2h-cow-songs-projects.vercel.app/)**
 
-음료 레시피 공유 플랫폼
 
 ## 프로젝트 구조
 
