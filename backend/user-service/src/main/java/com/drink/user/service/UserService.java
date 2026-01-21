@@ -32,17 +32,17 @@ public class UserService {
 
     @Transactional
     public UserDto createUser(CreateUserRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.email())) {
             throw new RuntimeException("이미 존재하는 이메일입니다");
         }
-        if (userRepository.existsByNickname(request.getNickname())) {
+        if (userRepository.existsByNickname(request.nickname())) {
             throw new RuntimeException("이미 존재하는 닉네임입니다");
         }
 
         User user = User.builder()
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .nickname(request.getNickname())
+                .email(request.email())
+                .password(request.password())
+                .nickname(request.nickname())
                 .build();
 
         return toDto(userRepository.save(user));

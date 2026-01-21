@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import api from '../services/api';
+import axios from 'axios';
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -9,7 +9,7 @@ const SignUp = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        name: ''
+        nickname: ''
     });
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -35,12 +35,20 @@ const SignUp = () => {
             setError('비밀번호를 입력해주세요.');
             return false;
         }
-        if (formData.password.length < 6) {
-            setError('비밀번호는 최소 6자 이상이어야 합니다.');
+        if (formData.password.length < 4) {
+            setError('비밀번호는 최소 4자 이상이어야 합니다.');
             return false;
         }
         if (formData.password !== formData.confirmPassword) {
             setError('비밀번호가 일치하지 않습니다.');
+            return false;
+        }
+        if (!formData.nickname) {
+            setError('닉네임을 입력해주세요.');
+            return false;
+        }
+        if (formData.nickname.length < 2 || formData.nickname.length > 20) {
+            setError('닉네임은 2~20자여야 합니다.');
             return false;
         }
         return true;
@@ -48,7 +56,7 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             return;
         }
@@ -57,13 +65,13 @@ const SignUp = () => {
         setError('');
 
         try {
-            // 백엔드 API 호출 (실제 엔드포인트에 맞게 수정 필요)
-            await api.post('/auth/signup', {
+            // 백엔드 API 호출
+            await axios.post('http://localhost:8080/api/users', {
                 email: formData.email,
                 password: formData.password,
-                name: formData.name || formData.email.split('@')[0]
+                nickname: formData.nickname
             });
-            
+
             alert('회원가입이 완료되었습니다!');
             navigate('/');
         } catch (error) {
@@ -91,19 +99,20 @@ const SignUp = () => {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        {/* 이름 (선택사항) */}
+                        {/* 닉네임 (필수) */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                이름 <span className="text-gray-400 text-xs">(선택사항)</span>
+                                닉네임 <span className="text-rose-500">*</span>
                             </label>
                             <div className="relative">
                                 <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                 <input
                                     type="text"
-                                    name="name"
-                                    placeholder="이름을 입력하세요"
+                                    name="nickname"
+                                    required
+                                    placeholder="닉네임을 입력하세요 (2~20자)"
                                     className="w-full pl-12 pr-4 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition bg-white/80"
-                                    value={formData.name}
+                                    value={formData.nickname}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -139,7 +148,7 @@ const SignUp = () => {
                                     type={showPassword ? 'text' : 'password'}
                                     name="password"
                                     required
-                                    placeholder="최소 6자 이상"
+                                    placeholder="최소 4자 이상"
                                     className="w-full pl-12 pr-12 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition bg-white/80"
                                     value={formData.password}
                                     onChange={handleChange}
