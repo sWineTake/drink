@@ -1,5 +1,6 @@
 package com.drink.user.controller;
 
+import com.drink.user.common.Response;
 import com.drink.user.dto.CreateUserRequest;
 import com.drink.user.dto.UserDto;
 import com.drink.user.service.UserService;
@@ -29,9 +30,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody CreateUserRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userService.createUser(request));
+    public Response<UserDto> createUser(@Valid @RequestBody CreateUserRequest request) {
+        return userService.createUser(request);
     }
 
     @DeleteMapping("/{id}")

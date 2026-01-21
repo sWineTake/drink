@@ -1,5 +1,7 @@
 package com.drink.user.service;
 
+import com.drink.user.common.Response;
+import com.drink.user.common.ResponseCode;
 import com.drink.user.dto.CreateUserRequest;
 import com.drink.user.dto.UserDto;
 import com.drink.user.entity.User;
@@ -15,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -59,13 +60,14 @@ class UserServiceTest {
         given(userRepository.save(any(User.class))).willReturn(savedUser);
 
         // when
-        UserDto result = userService.createUser(createUserRequest);
+        Response<UserDto> result = userService.createUser(createUserRequest);
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getEmail()).isEqualTo(createUserRequest.email());
-        assertThat(result.getNickname()).isEqualTo(createUserRequest.nickname());
+        assertThat(result.getCode()).isEqualTo(ResponseCode.SUCCESS.getCode());
+        assertThat(result.getData().getId()).isEqualTo(1L);
+        assertThat(result.getData().getEmail()).isEqualTo(createUserRequest.email());
+        assertThat(result.getData().getNickname()).isEqualTo(createUserRequest.nickname());
 
         verify(userRepository).existsByEmail(createUserRequest.email());
         verify(userRepository).existsByNickname(createUserRequest.nickname());
@@ -73,15 +75,18 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("createUser - 이미 존재하는 이메일이면 예외를 던진다")
-    void 이미_존재하는_이메일이면_예외를_던진다() {
+    @DisplayName("createUser - 이미 존재하는 이메일이면 에러 응답을 반환한다")
+    void 이미_존재하는_이메일이면_에러_응답을_반환한다() {
         // given
         given(userRepository.existsByEmail(createUserRequest.email())).willReturn(true);
 
-        // when & then
-        assertThatThrownBy(() -> userService.createUser(createUserRequest))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("이미 존재하는 이메일입니다");
+        // when
+        Response<?> result = userService.createUser(createUserRequest);
+
+        // then
+        assertThat(result.getCode()).isEqualTo(ResponseCode.EMAIL_ALREADY_EXIST.getCode());
+        assertThat(result.getMessage()).isEqualTo(ResponseCode.EMAIL_ALREADY_EXIST.getMessage());
+        assertThat(result.getData()).isNull();
 
         verify(userRepository).existsByEmail(createUserRequest.email());
         verify(userRepository, never()).existsByNickname(any());
@@ -89,16 +94,19 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("createUser - 이미 존재하는 닉네임이면 예외를 던진다")
-    void 이미_존재하는_닉네임이면_예외를_던진다() {
+    @DisplayName("createUser - 이미 존재하는 닉네임이면 에러 응답을 반환한다")
+    void 이미_존재하는_닉네임이면_에러_응답을_반환한다() {
         // given
         given(userRepository.existsByEmail(createUserRequest.email())).willReturn(false);
         given(userRepository.existsByNickname(createUserRequest.nickname())).willReturn(true);
 
-        // when & then
-        assertThatThrownBy(() -> userService.createUser(createUserRequest))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("이미 존재하는 닉네임입니다");
+        // when
+        Response<?> result = userService.createUser(createUserRequest);
+
+        // then
+        assertThat(result.getCode()).isEqualTo(ResponseCode.NICKNAME_ALREADY_EXIST.getCode());
+        assertThat(result.getMessage()).isEqualTo(ResponseCode.NICKNAME_ALREADY_EXIST.getMessage());
+        assertThat(result.getData()).isNull();
 
         verify(userRepository).existsByEmail(createUserRequest.email());
         verify(userRepository).existsByNickname(createUserRequest.nickname());

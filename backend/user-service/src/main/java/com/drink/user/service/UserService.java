@@ -1,5 +1,7 @@
 package com.drink.user.service;
 
+import com.drink.user.common.Response;
+import com.drink.user.common.ResponseCode;
 import com.drink.user.dto.CreateUserRequest;
 import com.drink.user.dto.UserDto;
 import com.drink.user.entity.User;
@@ -31,21 +33,20 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto createUser(CreateUserRequest request) {
+    public Response createUser(CreateUserRequest request) {
+
         if (userRepository.existsByEmail(request.email())) {
-            throw new RuntimeException("이미 존재하는 이메일입니다");
+            return Response.of(ResponseCode.EMAIL_ALREADY_EXIST);
         }
+
         if (userRepository.existsByNickname(request.nickname())) {
-            throw new RuntimeException("이미 존재하는 닉네임입니다");
+            return Response.of(ResponseCode.NICKNAME_ALREADY_EXIST);
         }
 
-        User user = User.builder()
-                .email(request.email())
-                .password(request.password())
-                .nickname(request.nickname())
-                .build();
+        User user = User.of(request.email(), request.password(), request.nickname());
+        UserDto dto = toDto(userRepository.save(user));
+        return Response.of(dto);
 
-        return toDto(userRepository.save(user));
     }
 
     @Transactional
