@@ -93,6 +93,73 @@ cd backend
 
 ---
 
+## Database (MySQL Docker)
+
+### 데이터베이스 구성
+각 마이크로서비스별로 독립된 MySQL 데이터베이스를 사용합니다.
+
+| 서비스 | 컨테이너명 | 데이터베이스 | 포트 | 용도 |
+|--------|-----------|-------------|------|------|
+| User Service | user-mysql | user_db | 3306 | 사용자 정보, 인증 데이터 관리 |
+| Recipe Service | recipe-mysql | recipe_db | 3307 | 음료 레시피 데이터 관리 |
+| Comment Service | comment-mysql | comment_db | 3308 | 레시피 댓글 데이터 관리 |
+
+### Docker 실행 방법
+
+#### 전체 DB 실행
+```bash
+cd backend
+docker-compose up -d
+```
+
+#### 개별 DB 실행
+```bash
+cd backend
+# User DB만 실행
+docker-compose up -d user-mysql
+
+# Recipe DB만 실행
+docker-compose up -d recipe-mysql
+
+# Comment DB만 실행
+docker-compose up -d comment-mysql
+```
+
+#### DB 중지
+```bash
+cd backend
+# 전체 중지
+docker-compose down
+
+# 볼륨까지 삭제 (데이터 초기화)
+docker-compose down -v
+```
+
+### 접속 정보
+
+#### User MySQL (사용자 서비스용)
+- **Host**: localhost
+- **Port**: 3306
+- **Database**: user_db
+- **User**: user
+- **Password**: user1234
+
+#### Recipe MySQL (레시피 서비스용)
+- **Host**: localhost
+- **Port**: 3307
+- **Database**: recipe_db
+- **User**: recipe
+- **Password**: recipe1234
+
+#### Comment MySQL (댓글 서비스용)
+- **Host**: localhost
+- **Port**: 3308
+- **Database**: comment_db
+- **User**: comment
+- **Password**: comment1234
+
+---
+
 ## 개발 환경 설정
 
 ### 필수 요구사항
