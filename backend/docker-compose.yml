@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  user-mysql:
+    image: mysql:8.0
+    container_name: user-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: user_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - user-mysql-data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  recipe-mysql:
+    image: mysql:8.0
+    container_name: recipe-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: recipe_db
+      MYSQL_USER: recipe
+      MYSQL_PASSWORD: recipe1234
+    ports:
+      - "3307:3306"
+    volumes:
+      - recipe-mysql-data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  comment-mysql:
+    image: mysql:8.0
+    container_name: comment-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: comment_db
+      MYSQL_USER: comment
+      MYSQL_PASSWORD: comment1234
+    ports:
+      - "3308:3306"
+    volumes:
+      - comment-mysql-data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  user-mysql-data:
+  recipe-mysql-data:
+  comment-mysql-data:
