@@ -32,25 +32,37 @@ const Login = () => {
         setError('');
 
         try {
-            // 백엔드 API 호출 (실제 엔드포인트에 맞게 수정 필요)
-            const response = await api.post('/auth/login', {
+            // 백엔드 API 호출
+            const response = await api.post('/users/login', {
                 email: formData.email,
                 password: formData.password
             });
-            
-            // JWT 토큰 저장
-            if (response.data.token) {
-                setToken(response.data.token);
-            } else if (response.data.accessToken) {
-                setToken(response.data.accessToken);
+
+            // 응답 코드 확인 (200이 아니면 에러)
+            if (response.data.code !== 200) {
+                setError(response.data.message || '로그인에 실패했습니다.');
+                return;
             }
-            
+
+            // JWT 토큰 저장 (data 안에 토큰이 있는 경우)
+            const tokenData = response.data.data;
+            if (tokenData?.token) {
+                setToken(tokenData.token);
+            } else if (tokenData?.accessToken) {
+                setToken(tokenData.accessToken);
+            }
+
             // 이전 페이지로 리다이렉트 또는 홈으로
             const from = new URLSearchParams(window.location.search).get('from') || '/';
             navigate(from);
         } catch (error) {
             console.error('Login error:', error);
-            setError(error.response?.data?.message || '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
+            // 서버에서 에러 응답이 온 경우
+            if (error.response?.data?.message) {
+                setError(error.response.data.message);
+            } else {
+                setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
+            }
         } finally {
             setLoading(false);
         }

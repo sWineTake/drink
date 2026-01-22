@@ -3,8 +3,13 @@ package com.drink.user.service;
 import com.drink.user.common.Response;
 import com.drink.user.common.ResponseCode;
 import com.drink.user.dto.CreateUserRequest;
+import com.drink.user.dto.LoginRequest;
+import com.drink.user.dto.LoginResponse;
 import com.drink.user.dto.UserDto;
+import com.drink.user.entity.User;
+import com.drink.user.utils.JwtUtil;
 import com.drink.user.utils.PasswordUtil;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +19,7 @@ public class UserService {
 
     private final UserQueryService query;
     private final UserCommandService command;
+    private final JwtUtil jwtUtil;
 
     public Response createUser(CreateUserRequest request) {
 
@@ -34,5 +40,18 @@ public class UserService {
 
     }
 
+    public Response login(LoginRequest request) {
+
+        Optional<User> optionalUser = query.findByEmailAndValidatePassword(request);
+
+        if (optionalUser.isEmpty()) {
+            Response.of(ResponseCode.LOGIN_FAILED);
+        }
+
+        User user = optionalUser.get();
+        String token = jwtUtil.generateToken(user.getId(), user.getEmail());
+        return Response.of(LoginResponse.of(token));
+
+    }
 
 }

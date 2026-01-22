@@ -17,3 +17,7 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+
+jwt:
+  secret: drinkAppSecretKeyForJwtTokenGeneration2024!@#$%^&*
+  expiration: 86400000  # 24시간 (밀리초)
