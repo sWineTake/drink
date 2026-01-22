@@ -1,5 +1,6 @@
 rootProject.name = 'drink-backend'
 
+include 'common'
 include 'gateway'
 include 'user-service'
 include 'recipe-service'

@@ -28,4 +28,10 @@ public class UserController {
         return userService.login(request);
     }
 
+    @GetMapping("/me")
+    @Description("내 정보 조회")
+    public Response getMyInfo(@RequestHeader("X-User-Id") Long userId) {
+        return userService.getMyInfo(userId);
+    }
+
 }

@@ -6,6 +6,7 @@ import RecipeDetail from './pages/RecipeDetail';
 import AddRecipe from './pages/AddRecipe';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import MyPage from './pages/MyPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/add" element={<AddRecipe />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/mypage" element={<MyPage />} />
         </Routes>
       </div>
     </Router>

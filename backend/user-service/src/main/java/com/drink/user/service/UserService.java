@@ -7,7 +7,7 @@ import com.drink.user.dto.LoginRequest;
 import com.drink.user.dto.LoginResponse;
 import com.drink.user.dto.UserDto;
 import com.drink.user.entity.User;
-import com.drink.user.utils.JwtUtil;
+import com.drink.common.jwt.JwtUtil;
 import com.drink.user.utils.PasswordUtil;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +51,18 @@ public class UserService {
         User user = optionalUser.get();
         String token = jwtUtil.generateToken(user.getId(), user.getEmail());
         return Response.of(LoginResponse.of(token));
+
+    }
+
+    public Response getMyInfo(Long userId) {
+
+        Optional<User> optionalUser = query.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            Response.of(ResponseCode.USER_NOT_FOUND);
+        }
+
+        return Response.of(UserDto.from(optionalUser.get()));
 
     }
 

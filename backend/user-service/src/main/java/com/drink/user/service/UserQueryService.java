@@ -32,4 +32,8 @@ public class UserQueryService {
                 .filter(user -> passwordEncoder.matches(request.password(), user.getPassword()));
     }
 
+    public Optional<User> findById(Long userId) {
+        return userRepository.findById(userId);
+    }
+
 }

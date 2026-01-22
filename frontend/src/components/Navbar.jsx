@@ -1,14 +1,15 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Wine, PlusCircle } from 'lucide-react';
+import { Wine, PlusCircle, User } from 'lucide-react';
 import { isAuthenticated } from '../utils/auth';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const loggedIn = isAuthenticated();
 
     const handleAddRecipeClick = (e) => {
         e.preventDefault();
-        if (!isAuthenticated()) {
+        if (!loggedIn) {
             navigate('/login?from=/add');
         } else {
             navigate('/add');
@@ -27,7 +28,7 @@ const Navbar = () => {
                             <span className="font-bold text-2xl bg-gradient-to-r from-rose-600 to-orange-600 bg-clip-text text-transparent">음료 레시피</span>
                         </Link>
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center space-x-3">
                         <button
                             onClick={handleAddRecipeClick}
                             className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-rose-500 to-orange-500 text-white hover:from-rose-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 font-medium"
@@ -35,6 +36,23 @@ const Navbar = () => {
                             <PlusCircle className="w-5 h-5" />
                             <span>레시피 공유하기</span>
                         </button>
+                        {loggedIn ? (
+                            <Link
+                                to="/mypage"
+                                className="flex items-center space-x-2 px-4 py-3 rounded-xl border-2 border-orange-200 text-gray-700 hover:bg-orange-50 transition-all font-medium"
+                            >
+                                <User className="w-5 h-5" />
+                                <span>마이페이지</span>
+                            </Link>
+                        ) : (
+                            <Link
+                                to="/login"
+                                className="flex items-center space-x-2 px-4 py-3 rounded-xl border-2 border-orange-200 text-gray-700 hover:bg-orange-50 transition-all font-medium"
+                            >
+                                <User className="w-5 h-5" />
+                                <span>로그인</span>
+                            </Link>
+                        )}
                     </div>
                 </div>
             </div>

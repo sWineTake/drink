@@ -11,7 +11,8 @@ public enum ResponseCode {
     EMAIL_ALREADY_EXIST("이메일이 이미 존재합니다.", HttpStatus.BAD_REQUEST.value()),
     NICKNAME_ALREADY_EXIST("이미 존재하는 닉네임입니다", HttpStatus.BAD_REQUEST.value()),
     PASSWORD_FAIL("비밀번호는 8자 이상, 영문 + 숫자 포함 로 만들어주세요.", HttpStatus.BAD_REQUEST.value()),
-    LOGIN_FAILED("이메일 또는 비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value())
+    LOGIN_FAILED("이메일 또는 비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
+    USER_NOT_FOUND("사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND.value())
     ;
 
     private final String message;
