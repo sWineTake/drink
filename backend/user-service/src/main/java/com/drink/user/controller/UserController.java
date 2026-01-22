@@ -6,9 +6,11 @@ import com.drink.user.dto.LoginRequest;
 import com.drink.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Description;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -25,6 +27,7 @@ public class UserController {
     @PostMapping("/login")
     @Description("로그인")
     public Response login(@Valid @RequestBody LoginRequest request) {
+        log.info("login request: {}", request);
         return userService.login(request);
     }
 

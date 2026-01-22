@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.drink.user-service", "com.drink.common"})
+@ComponentScan(basePackages = {"com.drink.user", "com.drink.common"})
 public class UserServiceApplication {
 
     public static void main(String[] args) {
