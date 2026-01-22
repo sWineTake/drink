@@ -35,8 +35,12 @@ const SignUp = () => {
             setError('비밀번호를 입력해주세요.');
             return false;
         }
-        if (formData.password.length < 4) {
-            setError('비밀번호는 최소 4자 이상이어야 합니다.');
+        if (formData.password.length < 8) {
+            setError('비밀번호는 8자 이상이어야 합니다.');
+            return false;
+        }
+        if (!/[a-zA-Z]/.test(formData.password) || !/[0-9]/.test(formData.password)) {
+            setError('비밀번호는 영문과 숫자를 모두 포함해야 합니다.');
             return false;
         }
         if (formData.password !== formData.confirmPassword) {
@@ -66,17 +70,28 @@ const SignUp = () => {
 
         try {
             // 백엔드 API 호출
-            await axios.post('http://localhost:8080/api/users', {
+            const response = await axios.post('http://localhost:8080/api/users', {
                 email: formData.email,
                 password: formData.password,
                 nickname: formData.nickname
             });
 
+            // 응답 코드 확인 (200이 아니면 에러)
+            if (response.data.code !== 200) {
+                setError(response.data.message || '회원가입에 실패했습니다.');
+                return;
+            }
+
             alert('회원가입이 완료되었습니다!');
-            navigate('/');
+            navigate('/login');
         } catch (error) {
             console.error('Signup error:', error);
-            setError(error.response?.data?.message || '회원가입에 실패했습니다. 다시 시도해주세요.');
+            // 서버에서 에러 응답이 온 경우
+            if (error.response?.data?.message) {
+                setError(error.response.data.message);
+            } else {
+                setError('회원가입에 실패했습니다. 다시 시도해주세요.');
+            }
         } finally {
             setLoading(false);
         }
@@ -148,7 +163,7 @@ const SignUp = () => {
                                     type={showPassword ? 'text' : 'password'}
                                     name="password"
                                     required
-                                    placeholder="최소 4자 이상"
+                                    placeholder="8자 이상, 영문 + 숫자 포함"
                                     className="w-full pl-12 pr-12 py-3 border-2 border-orange-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition bg-white/80"
                                     value={formData.password}
                                     onChange={handleChange}

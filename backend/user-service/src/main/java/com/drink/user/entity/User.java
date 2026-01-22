@@ -40,6 +40,7 @@ public class User {
     public static User of(String email, String password, String nickname) {
 
         User user = new User();
+        user.createdAt = LocalDateTime.now();
         user.email = email;
         user.password = password;
         user.nickname = nickname;
