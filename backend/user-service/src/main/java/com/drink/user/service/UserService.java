@@ -54,16 +54,4 @@ public class UserService {
 
     }
 
-    public Response getMyInfo(Long userId) {
-
-        Optional<User> optionalUser = query.findById(userId);
-
-        if (optionalUser.isEmpty()) {
-            Response.of(ResponseCode.USER_NOT_FOUND);
-        }
-
-        return Response.of(UserDto.from(optionalUser.get()));
-
-    }
-
 }

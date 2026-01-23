@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, LogOut, BookOpen, Settings, ChevronRight } from 'lucide-react';
-import { isAuthenticated, removeToken, getToken } from '../utils/auth';
+import { isAuthenticated, removeToken } from '../utils/auth';
 import api from '../services/api';
 
 const MyPage = () => {
@@ -22,16 +22,12 @@ const MyPage = () => {
 
     const fetchUserInfo = async () => {
         try {
-            const token = getToken();
-            if (token) {
-                const payload = JSON.parse(atob(token.split('.')[1]));
-                setUserInfo({
-                    email: payload.email || payload.sub,
-                    nickname: payload.nickname || payload.name || '사용자'
-                });
+            const response = await api.get('/myinfo');
+            if (response.data.code === 200) {
+                setUserInfo(response.data.data);
             }
         } catch (error) {
-            console.error('Failed to parse token:', error);
+            console.error('Failed to fetch user info:', error);
         }
     };
 
@@ -160,6 +156,20 @@ const MyPage = () => {
                                 <h2 className="text-xl font-bold text-gray-800 mb-6">내 정보 관리</h2>
                                 {userInfo && (
                                     <div className="space-y-4">
+                                        {/* 프로필 이미지 */}
+                                        <div className="flex justify-center mb-6">
+                                            {userInfo.profileImage ? (
+                                                <img
+                                                    src={userInfo.profileImage}
+                                                    alt="프로필 이미지"
+                                                    className="w-24 h-24 rounded-full object-cover border-4 border-orange-200"
+                                                />
+                                            ) : (
+                                                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-rose-500 to-orange-500 flex items-center justify-center">
+                                                    <User className="w-12 h-12 text-white" />
+                                                </div>
+                                            )}
+                                        </div>
                                         <div className="flex items-center p-4 rounded-xl bg-gray-50">
                                             <div className="bg-gradient-to-br from-rose-500 to-orange-500 p-3 rounded-full mr-4">
                                                 <User className="w-6 h-6 text-white" />
@@ -178,6 +188,23 @@ const MyPage = () => {
                                                 <p className="font-semibold text-gray-800">{userInfo.email}</p>
                                             </div>
                                         </div>
+                                        {userInfo.createdAt && (
+                                            <div className="flex items-center p-4 rounded-xl bg-gray-50">
+                                                <div className="bg-gradient-to-br from-rose-500 to-orange-500 p-3 rounded-full mr-4">
+                                                    <BookOpen className="w-6 h-6 text-white" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm text-gray-500">가입일</p>
+                                                    <p className="font-semibold text-gray-800">
+                                                        {new Date(userInfo.createdAt).toLocaleDateString('ko-KR', {
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric'
+                                                        })}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </div>
