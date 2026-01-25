@@ -1,3 +1,6 @@
+파드 조회
+```kubectl get pods```
+
 해당 파일 실행 명령어
 ```kubectl apply -f nginx-pod.yml```
 
