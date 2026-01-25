@@ -13,3 +13,8 @@ POD 접속
 
 POD 삭제
 ```kubectl delete pod <POD-NAME>```
+
+
+POD 로그 확인하기
+```kubectl describe pods <POD-NAME>```
+```kubectl log <POD-NAME>```

@@ -1,0 +1,24 @@
+# 루트에서 아래와같은 경로로 실행한다.
+# kubectl apply -f infra/infra-study/drink/spring-pod.yaml
+
+# pod가 잘 생성되었는지 확인 - ImagePullBackOff 에러 발생
+# kubectl get pods
+
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: spring-pod
+
+spec:
+  containers:
+    - name: spring-container
+      image: spring-server
+      ports:
+        - containerPort: 8080
+
+      # Always: 도커 레즈스트리에서 가져옴 없으면 에러 (기본값)
+      # IfNotPresent: 로컬에서 가져오고 없으면 레즈스트리에서 가져옴
+      # Never: 무조건 로컬에서만 이미지를 가져온다.
+      imagePullPolicy: IfNotPresent
+
