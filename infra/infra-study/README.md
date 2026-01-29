@@ -20,4 +20,4 @@ POD 삭제
 
 POD 로그 확인하기
 ```kubectl describe pods <POD-NAME>```
-```kubectl log <POD-NAME>```
+```kubectl logs <POD-NAME>```

@@ -39,6 +39,7 @@ public class WorkOrderController {
         return ResponseEntity.ok().build();
     }
 
+    // Todo) 컨트롤러 수정 필요
     @GetMapping("/workers/{workerId}")
     public ResponseEntity<?> getWorkerDetail(@PathVariable(name = "workerId") Long id) {
         // return ResponseEntity.ok(workerService.findById(id));
