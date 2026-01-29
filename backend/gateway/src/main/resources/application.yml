@@ -11,7 +11,7 @@ spring:
         - id: user-service-public
           uri: http://localhost:8081
           predicates:
-            - Path=/api/users/**
+            - Path=/api/**
             - Method=POST
 
         # User Service - 인증 필요
