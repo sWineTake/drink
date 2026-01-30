@@ -36,3 +36,8 @@ spec:
                 configMapKeyRef:
                   name: spring-config
                   key: my-account
+            - name: MY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spring-secret
+                  key: my-password
