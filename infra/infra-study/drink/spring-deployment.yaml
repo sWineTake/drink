@@ -1,5 +1,7 @@
 # Deployment를 실행
 # kubectl apply -f infra/infra-study/drink/spring-deployment.yaml
+# Deployment 재실행
+# kubectl rollout restart deployment <metadata.name>
 
 apiVersion: apps/v1
 kind: Deployment
@@ -23,7 +25,14 @@ spec:
     spec:
       containers:
         - name: spring-container
-          image: spring-server
+          image: user-service-spring-server
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
+
+          env:
+            - name: MY_ACCOUNT
+              valueFrom:
+                configMapKeyRef:
+                  name: spring-config
+                  key: my-account

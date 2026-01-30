@@ -17,6 +17,6 @@ spec:
     app: backend-app # 서비스가 여러 파드에 연결해야하는데, backend-app 레이블을 가진 파드에 연결
   ports:
     - protocol: TCP # 서비스에 접속하기 위한 프로토콜
-      port: 8080 # 쿠버네티스 내부에서 Service에 접속하기 위한 포트 번호
-      targetPort: 8080 # 매핑하기 위한 파드의 포트 번호
+      port: 8081 # 쿠버네티스 내부에서 Service에 접속하기 위한 포트 번호
+      targetPort: 8081 # 매핑하기 위한 파드의 포트 번호
       nodePort: 30000 # 외부에서 사용자들이 접근하게 될 포트 번호

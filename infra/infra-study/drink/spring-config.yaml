@@ -1,0 +1,11 @@
+# kubectl apply -f infra/infra-study/drink/spring-config.yaml
+# kubectl get configmap
+
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: spring-config
+
+data:
+  my-account: woosong
