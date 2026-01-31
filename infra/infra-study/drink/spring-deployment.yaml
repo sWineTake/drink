@@ -32,15 +32,35 @@ spec:
 
           env:
             - name: DB_HOST
-              value: mysql-service # infra/infra-study/mysql/mysql-service.yaml 파일에 metadata.name과 연결할 수 있음
+              # value: mysql-service # infra/infra-study/mysql/mysql-service.yaml 파일에 metadata.name과 연결할 수 있음
+              valueFrom:
+                configMapKeyRef:
+                  name: spring-config
+                  key: db-host
             - name: DB_PORT
-              value: "3306"
+              # value: "3306"
+              valueFrom:
+                configMapKeyRef:
+                  name: spring-config
+                  key: db-port
             - name: DB_NAME
-              value: kub-practice
+              # value: kub-practice - 하드코딩에서 configMap으로 변경
+              valueFrom:
+                configMapKeyRef:
+                  name: spring-config
+                  key: db-name
             - name: DB_USERNAME
-              value: root
+              # value: root - 하드코딩에서 configMap으로 변경
+              valueFrom:
+                secretKeyRef:
+                  name: spring-secret
+                  key: db-username
             - name: DB_PASSWORD
-              value: password123
+              # value: password123 - 하드코딩에서 secret으로 변경
+              valueFrom:
+                secretKeyRef:
+                  name: spring-secret
+                  key: db-password
             - name: MY_ACCOUNT
               valueFrom:
                 configMapKeyRef:

@@ -8,4 +8,8 @@ metadata:
   name: spring-config
 
 data:
+  db-host: mysql-service
+  db-port: "3306"
+  db-name: kub-practice
   my-account: woosong
+
