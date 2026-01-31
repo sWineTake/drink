@@ -11,7 +11,7 @@ metadata:
 
 # Deployment 세부 정보
 spec:
-  replicas: 5
+  replicas: 3
   selector:
     matchLabels:
       app: backend-app
@@ -31,6 +31,16 @@ spec:
             - containerPort: 8081
 
           env:
+            - name: DB_HOST
+              value: mysql-service # infra/infra-study/mysql/mysql-service.yaml 파일에 metadata.name과 연결할 수 있음
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              value: kub-practice
+            - name: DB_USERNAME
+              value: root
+            - name: DB_PASSWORD
+              value: password123
             - name: MY_ACCOUNT
               valueFrom:
                 configMapKeyRef:
