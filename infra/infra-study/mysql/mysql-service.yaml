@@ -1,0 +1,17 @@
+# kubectl apply -f  infra/infra-study/mysql/mysql-service.yaml
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: mysql-service
+
+spec:
+  type: NodePort
+  selector:
+    app: mysql-db # Deployment 연결하기위해 이름을 똑같이 맞춰줘야함
+  ports:
+    - protocol: TCP
+      nodePort: 30002
+      port: 3306
+      targetPort: 3306

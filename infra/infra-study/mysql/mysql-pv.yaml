@@ -1,0 +1,15 @@
+# kubectl apply -f  infra/infra-study/mysql/mysql-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+
+metadata:
+  name: mysql-pv
+
+spec:
+  storageClassName: my-storage # PVC 와 PV연결을 위한 이름 설정
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath: # 컨테이너 밖 경로 볼륨에 설정
+    path: "/mnt/data"

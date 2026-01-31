@@ -1,0 +1,10 @@
+# kubectl apply -f  infra/infra-study/mysql/mysql-config.yaml
+
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: mysql-config
+
+data:
+  mysql-database: kub-practice
